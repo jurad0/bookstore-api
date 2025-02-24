@@ -1,0 +1,12 @@
+com\adobe\bookstore\repository\BookStockRepository.class
+com\adobe\bookstore\controller\OrderResource.class
+com\adobe\bookstore\BookstoreApplication.class
+com\adobe\bookstore\service\OrderService.class
+com\adobe\bookstore\dto\OrderItemDTO.class
+com\adobe\bookstore\dto\OrderDTO.class
+com\adobe\bookstore\controller\BookStockResource.class
+com\adobe\bookstore\entity\OrderItem.class
+com\adobe\bookstore\entity\BookStock.class
+com\adobe\bookstore\entity\Order.class
+com\adobe\bookstore\repository\OrderRepository.class
+com\adobe\bookstore\service\StockService.class
