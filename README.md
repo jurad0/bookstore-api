@@ -1,56 +1,123 @@
-# Commerce Services - Technical Interview
+# 📚 Online Bookstore API
 
-### Context
+## 📝 Project Description
+This is a RESTful API for an **online bookstore**. It allows users to:
+- 📦 **Create orders** for books in stock.
+- 📄 **Retrieve existing orders**.
+- 📊 **Check stock availability** before processing an order.
+- 🔄 **Update stock asynchronously** after a successful order.
 
-We are an online book store. We have an API that returns our catalog and stock. 
-We want to implement two new features in our system:
-- Process new orders
-- Retrieve existing orders
+This project is built using **Java 17** and **Spring Boot**, following clean architecture principles.
 
-### Functional Requirements
+---
 
-- **Create a new Order**:
-  - The application receives orders in a JSON format through an HTTP API endpoint (POST).
-  - Orders contain a list of books and the quantity.
-  - Before registering the order, the system should check if there's enough stock to fulfill the order (`src/main/resources/import.sql` will set the initial stock).
-  - If one of the books in the order does not have enough stock we will reject the entire order.
-  - After stock validation, the order is marked as a success, and it would return a Unique Order Identifier to the caller of the HTTP API endpoint.
-  - If the order was processed we need to update available stock, taking into consideration:
-    - Updating stock should not be a blocker for replying to the customer.
-    - If the process of updating stock fails, should not cause an error in order processing.
+## 🚀 Features
+- ✅ **Create an order** (Validates stock before processing).
+- ✅ **Reject an order if any book is out of stock**.
+- ✅ **Retrieve all orders**.
+- ✅ **Stock updates asynchronously** (does not block API responses).
+- ✅ **Database persistence using Spring Data JPA**.
+- ✅ **Unit tests with JUnit**.
 
-- **Retrieve Orders**:
-  - The application has an endpoint to extract a list of existing orders. So that we can run `curl localhost:8080/orders/` and get a list of them
+---
 
-### Required
+## 🏗️ Project Structure
+The project follows a modular structure for better organization and maintainability.
+```
+📁 src/main/java/com/adobe/bookstore/ 
 
-- Resolution needs to be fully in English
-- You need to use Java 17
-- This repo contains the existing bookstore code; fork or create a public repository with your solution.
-- We expect you to implement tests for the requested functionalities. You decide the scope.
-- **Once the code is complete, reply to your hiring person of contact.**
-
-### How to run
-
-Building
-```shell
-$ ./mvnw compile
+│── 📁 controller/ # REST API endpoints 
+│── 📁 dto/ # Data Transfer Objects (DTOs) 
+│── 📁 entity/ # JPA entities (database mapping) 
+│── 📁 repository/ # Data access layer (Spring Data JPA) 
+│── 📁 service/ # Business logic
+│── 📄 BookstoreApplication.java # Main Spring Boot class
 ```
 
-Test
-```shell
-$ ./mvnw test
+## 📡 API Endpoints
+
+### 📌 **1. Check Available Books**
+- **Endpoint:** `GET /books_stock/{bookid}`
+- **Description:** Returns the currently stock of a book.
+- **Response Example:**
+```json
+    {
+  "id": "12494472-c905-4ac0-a133-5ebb3b4751e4",
+  "name": "excepteur eiusmod cupidatat in amet",
+  "quantity": 0
+  }
+```
+### 📌 2. Create a New Order
+**Endpoint:** `POST /orders`  
+**Description:** Creates an order if all books have enough stock.
+
+#### **Request Body Example**
+```json
+{
+    "items": [
+        { "bookId": "book1", "quantity": 2 },
+        { "bookId": "book2", "quantity": 1 }
+    ]
+}
 ```
 
-Start the application
-
-```shell
-$ ./mvnw spring-boot:run
+#### **Successful Response Example**
+```json
+{ "orderId": 1 }
 ```
 
-Getting current stock for a given book 
-
-```shell
-$ curl localhost:8080/books_stock/ae1666d6-6100-4ef0-9037-b45dd0d5bb0e
-{"id":"ae1666d6-6100-4ef0-9037-b45dd0d5bb0e","name":"adipisicing culpa Lorem laboris adipisicing","quantity":0}
+#### **Error Response (Not enough stock)**
+```json
+{ "error": "Not enough stock for one or more books." }
 ```
+
+---
+
+### 📌 3. Retrieve Existing Orders
+**Endpoint:** `GET /orders/`  
+**Description:** Returns all orders that have been placed.
+
+#### **Response Example**
+```json
+[
+    {
+        "id": 1,
+        "items": [
+            { "bookId": "book1", "quantity": 2 },
+            { "bookId": "book2", "quantity": 1 }
+        ],
+        "status": "SUCCESS"
+    }
+]
+```
+
+---
+
+## ⚙️ Setup and Running the Project
+
+### **1️⃣ Clone the repository**
+```sh
+git clone https://github.com/jurad0/bookstore-api.git
+cd bookstore-api
+```
+
+### **2️⃣ Build the project**
+```sh
+mvn clean install
+```
+
+### **3️⃣ Run the application**
+```sh
+mvn spring-boot:run
+```
+The API will be available at **http://localhost:8080**.
+
+---
+
+## 🧪 Running Tests
+Execute unit tests using:
+```sh
+mvn test
+```
+
+
